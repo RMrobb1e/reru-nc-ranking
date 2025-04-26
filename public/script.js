@@ -1,3 +1,16 @@
+let debounceTimer; // Declare a variable to hold the debounce timer
+
+document
+  .getElementById("ignInput")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      clearTimeout(debounceTimer); // Clear any existing timer
+      debounceTimer = setTimeout(() => {
+        searchIGN(); // Call the search function after the debounce delay
+      }, 300); // Set a 300ms debounce delay
+    }
+  });
+
 async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
   const resultArea = document.getElementById("resultArea");
@@ -7,6 +20,9 @@ async function searchIGN() {
     resultArea.innerHTML = "<p class='text-red-500'>Please enter an IGN.</p>";
     return;
   }
+
+  // Show loading indicator
+  resultArea.innerHTML = "<p class='text-blue-500'>Loading...</p>";
 
   // const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=2020&wmsso_sign=check&keyword=${encodeURIComponent(ign)}&rankingType=growth`;
   const url = `/api/growth?ign=${encodeURIComponent(ign)}`;
