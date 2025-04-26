@@ -25,7 +25,7 @@ A web application to search and display growth rankings for Night Crows characte
    ```bash
    npm install
    ```
-3. Start server
+3. Start developing
    ```bash
-   npm start
+   npm run dev
    ```
