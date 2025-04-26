@@ -11,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const weaponTypes = {
+  All: 0,
   Bow: 21,
   OneHanded: 13,
   TwinSword: 12,
@@ -23,6 +24,7 @@ const weaponTypes = {
 };
 
 const regionCodes = {
+  All: 0,
   AsiaI: 2010,
   AsiaII: 2020,
   Naeu: 3010,
@@ -58,10 +60,11 @@ app.get("/api/growth", async (req, res) => {
     return res.status(400).json({ error: "Missing 'ign' query parameter" });
   }
 
-  const regionCode = "2020"; // Default region code
+  const regionCode = "0"; // Default region code
   const rankingType = "growth"; // Default ranking type
+  const weaponType = "0"; // Default weapon type
 
-  const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=${regionCode}&wmsso_sign=check&keyword=${encodeURIComponent(
+  const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=${regionCode}&weaponType=${weaponType}&wmsso_sign=check&keyword=${encodeURIComponent(
     ign,
   )}&rankingType=${rankingType}`;
 
