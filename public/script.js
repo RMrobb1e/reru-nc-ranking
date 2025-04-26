@@ -1,15 +1,20 @@
 let debounceTimer; // Declare a variable to hold the debounce timer
 
-document
-  .getElementById("ignInput")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      clearTimeout(debounceTimer); // Clear any existing timer
-      debounceTimer = setTimeout(() => {
-        searchIGN(); // Call the search function after the debounce delay
-      }, 300); // Set a 300ms debounce delay
-    }
-  });
+document.addEventListener("DOMContentLoaded", () => {
+  // Ensure the DOM is fully loaded before accessing elements
+  const ignInput = document.getElementById("ignInput");
+
+  if (ignInput) {
+    ignInput.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        clearTimeout(debounceTimer); // Clear any existing timer
+        debounceTimer = setTimeout(() => {
+          searchIGN(); // Call the search function after the debounce delay
+        }, 300); // Set a 300ms debounce delay
+      }
+    });
+  }
+});
 
 async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
@@ -21,10 +26,13 @@ async function searchIGN() {
     return;
   }
 
-  // Show loading indicator
-  resultArea.innerHTML = "<p class='text-blue-500'>Loading...</p>";
+  // Show loading spinner
+  resultArea.innerHTML = `
+    <div class="flex justify-center items-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  `;
 
-  // const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=2020&wmsso_sign=check&keyword=${encodeURIComponent(ign)}&rankingType=growth`;
   const url = `/api/growth?ign=${encodeURIComponent(ign)}`;
 
   try {
