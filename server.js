@@ -64,20 +64,22 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // API proxy route
 app.get("/api/growth", async (req, res) => {
-  const { ign } = req.query;
+  const { ign, regionCode } = req.query;
 
   if (!ign) {
     return res.status(400).json({ error: "Missing 'ign' query parameter" });
   }
 
-  const cacheKey = ign.toLowerCase();
+  const cacheKey = [ign, regionCode].join("").toLowerCase();
   const cached = cache.get(cacheKey);
+
+  console.log({ cached });
 
   if (cached) {
     return res.json(cached);
   }
 
-  const regionCode = "0"; // Default region code
+  // const regionCode = "0"; // Default region code
   const rankingType = "growth"; // Default ranking type
   const weaponType = "0"; // Default weapon type
 

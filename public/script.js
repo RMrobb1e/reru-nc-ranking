@@ -20,6 +20,7 @@ async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
   const resultArea = document.getElementById("resultArea");
   resultArea.innerHTML = "";
+  const regionCode = document.getElementById("regionSelect").value; // Get selected region
 
   if (!ign) {
     resultArea.innerHTML = "<p class='text-red-500'>Please enter an IGN.</p>";
@@ -33,7 +34,9 @@ async function searchIGN() {
     </div>
   `;
 
-  const url = `/api/growth?ign=${encodeURIComponent(ign)}`;
+  const url = `/api/growth?ign=${encodeURIComponent(
+    ign,
+  )}&regionCode=${regionCode}`;
 
   try {
     const response = await fetch(url);
