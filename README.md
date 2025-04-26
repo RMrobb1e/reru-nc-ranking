@@ -21,3 +21,11 @@ A web application to search and display growth rankings for Night Crows characte
    git clone https://github.com/your-username/nc-ranking.git
    cd nc-ranking
    ```
+2. Install dependency
+   ```bash
+   npm install
+   ```
+3. Start server
+   ```bash
+   npm start
+   ```
