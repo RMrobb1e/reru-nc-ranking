@@ -68,6 +68,7 @@ async function fetchMetadata() {
 
 async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
+  const searchButton = document.querySelector("button[onclick='searchIGN()']");
   const resultArea = document.getElementById("resultArea");
   resultArea.innerHTML = "";
   const regionCode = document.getElementById("regionSelect").value; // Get selected region
