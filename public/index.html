@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Night Crows Growth Ranking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="script.js"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-2xl shadow-lg">
+    <h1 class="text-2xl font-bold mb-4">Night Crows Growth Ranking Search</h1>
+    <div class="flex items-center gap-4 mb-6">
+      <input type="text" id="ignInput" placeholder="Enter IGN" class="w-full p-3 border rounded-lg" />
+      <button onclick="searchIGN()" class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700">
+        Search
+      </button>
+    </div>
+    <div id="resultArea" class="mt-6"></div>
+  </div>
+</body>
+
+</html>

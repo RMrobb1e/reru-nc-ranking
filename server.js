@@ -1,9 +1,19 @@
 import express from "express";
 import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Needed because __dirname isn't available in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
+// Serve static files (frontend)
+app.use(express.static(path.join(__dirname, "public")));
+
+// API proxy route
 app.get("/api/growth", async (req, res) => {
   const { ign } = req.query;
 
@@ -26,6 +36,11 @@ app.get("/api/growth", async (req, res) => {
   }
 });
 
+// Catch-all route for SPA
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 app.listen(PORT, () => {
-  console.log(`Proxy server running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
