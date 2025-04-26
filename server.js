@@ -77,7 +77,7 @@ app.get("/api/growth", async (req, res) => {
     return res.json(cached);
   }
 
-  const regionCode = "2020"; // Default region code
+  const regionCode = "0"; // Default region code
   const rankingType = "growth"; // Default ranking type
   const weaponType = "0"; // Default weapon type
 
