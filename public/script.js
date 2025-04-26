@@ -9,7 +9,7 @@ async function searchIGN() {
   }
 
   // const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=2020&wmsso_sign=check&keyword=${encodeURIComponent(ign)}&rankingType=growth`;
-  const url = `http://localhost:3000/api/growth?ign=${encodeURIComponent(ign)}`;
+  const url = `/api/growth?ign=${encodeURIComponent(ign)}`;
 
   try {
     const response = await fetch(url);
