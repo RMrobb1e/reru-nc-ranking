@@ -126,7 +126,7 @@ async function searchIGN() {
          ${
            giphyUrl
              ? `<div class="mt-4">
-                <img src="${giphyUrl}" alt="Random Meme" class="rounded-lg shadow-md w-full" />
+                <img src="${giphyUrl}" alt="Random Meme" class="rounded-lg shadow-md h-[200px] w-auto mx-auto" />
               </div>`
              : ""
          }
