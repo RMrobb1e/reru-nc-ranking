@@ -2,6 +2,7 @@ import express from "express";
 import fetch from "node-fetch";
 import path from "path";
 import { fileURLToPath } from "url";
+import NodeCache from "node-cache";
 
 // Needed because __dirname isn't available in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -9,6 +10,15 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const cache = new NodeCache();
+
+function getSecondsUntilMidnight() {
+  const now = new Date();
+  const midnight = new Date();
+
+  midnight.setHours(24, 0, 0, 0); // Set to next midnight
+  return Math.floor((midnight - now) / 1000); // Convert ms to seconds
+}
 
 const weaponTypes = {
   Bow: 21,
@@ -58,6 +68,13 @@ app.get("/api/growth", async (req, res) => {
     return res.status(400).json({ error: "Missing 'ign' query parameter" });
   }
 
+  const cacheKey = ign.toLowerCase();
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    return res.json(cached);
+  }
+
   const regionCode = "2020"; // Default region code
   const rankingType = "growth"; // Default ranking type
 
@@ -68,6 +85,11 @@ app.get("/api/growth", async (req, res) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
+
+    // Cache it until midnight
+    const ttl = getSecondsUntilMidnight();
+    cache.set(cacheKey, data, ttl);
+
     res.json(data);
   } catch (err) {
     console.error("Fetch error:", err);
