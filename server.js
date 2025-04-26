@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://nc-ranking.onrender.com",
+    "https://reru-nc-ranking.onrender.com",
   ); // or specify the frontend domain here
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -34,14 +34,16 @@ app.get("/api/growth", async (req, res) => {
     return res.status(400).json({ error: "Missing 'ign' query parameter" });
   }
 
-  const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=2020&wmsso_sign=check&keyword=${encodeURIComponent(
+  const regionCode = "2020"; // Default region code
+  const rankingType = "growth"; // Default ranking type
+
+  const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=${regionCode}&wmsso_sign=check&keyword=${encodeURIComponent(
     ign,
-  )}&rankingType=growth`;
+  )}&rankingType=${rankingType}`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (err) {
     console.error("Fetch error:", err);
