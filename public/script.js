@@ -38,7 +38,6 @@ async function searchIGN() {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     const items = data.pageProps.rankingListData.items;
 
     if (!items || items.length === 0) {
