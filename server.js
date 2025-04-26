@@ -3,6 +3,8 @@ import fetch from "node-fetch";
 import path from "path";
 import { fileURLToPath } from "url";
 import NodeCache from "node-cache";
+import rateLimit from "express-rate-limit";
+import { rankingTypes, regions, weaponTypes } from "./utils/constants.js";
 
 // Needed because __dirname isn't available in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +14,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const cache = new NodeCache();
 
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: { error: "Rate limit exceeded. Please try again later." }, // Custom error message
+});
+
+app.use("/api", limiter);
+
 function getSecondsUntilMidnight() {
   const now = new Date();
   const midnight = new Date();
@@ -19,32 +29,6 @@ function getSecondsUntilMidnight() {
   midnight.setHours(24, 0, 0, 0); // Set to next midnight
   return Math.floor((midnight - now) / 1000); // Convert ms to seconds
 }
-
-const weaponTypes = {
-  All: 0,
-  Bow: 21,
-  OneHanded: 13,
-  TwinSword: 12,
-  Staff: 31,
-  Wand: 32,
-  TwoHanded: 11,
-  Spear: 14,
-  Dagger: 22,
-  Rapier: 23,
-};
-
-const regionCodes = {
-  All: 0,
-  AsiaI: 2010,
-  AsiaII: 2020,
-  Naeu: 3010,
-  Sa: 4010,
-};
-
-const rankingTypes = {
-  growth: "growth",
-  level: "level",
-};
 
 app.use((req, res, next) => {
   res.setHeader(
@@ -61,6 +45,12 @@ app.use((req, res, next) => {
 
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, "public")));
+
+// metadata
+app.get("/api/metadata", (req, res) => {
+  console.log({ called: "/api/metadata" });
+  res.json({ regions, weaponTypes, rankingTypes });
+});
 
 // API proxy route
 app.get("/api/growth", async (req, res) => {

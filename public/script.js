@@ -1,8 +1,20 @@
 let debounceTimer; // Declare a variable to hold the debounce timer
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Ensure the DOM is fully loaded before accessing elements
   const ignInput = document.getElementById("ignInput");
+  const regionSelect = document.getElementById("regionSelect");
+
+  if (regionSelect) {
+    const { regions } = await fetchMetadata();
+
+    regions.forEach((region) => {
+      const option = document.createElement("option");
+      option.value = region.code;
+      option.textContent = region.name;
+      regionSelect.appendChild(option);
+    });
+  }
 
   if (ignInput) {
     ignInput.addEventListener("keypress", function (event) {
@@ -15,6 +27,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+async function fetchMetadata() {
+  try {
+    const response = await fetch("/api/metadata");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching metadata:", err);
+    return { success: false, error: err };
+  }
+}
 
 async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
