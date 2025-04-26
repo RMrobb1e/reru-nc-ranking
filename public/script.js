@@ -28,6 +28,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+async function fetchGiphyMeme() {
+  try {
+    const keyResponse = await fetch("/api/giphy-key");
+    const { apiKey } = await keyResponse.json();
+
+    if (!apiKey) {
+      console.error("Giphy API key not found.");
+      return null;
+    }
+
+    const giphyResponse = await fetch(
+      `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=meme`,
+    );
+    const giphyData = await giphyResponse.json();
+    return giphyData.data.images.original.url;
+  } catch (err) {
+    console.error("Failed to fetch Giphy meme:", err);
+    return null;
+  }
+}
+
 async function fetchMetadata() {
   try {
     const response = await fetch("/api/metadata");
@@ -74,6 +95,7 @@ async function searchIGN() {
     }
 
     const item = items[0];
+    const giphyUrl = await fetchGiphyMeme();
 
     resultArea.innerHTML = `
       <div class="border rounded-lg p-4 bg-gray-50">
@@ -83,9 +105,7 @@ async function searchIGN() {
         <table class="w-full text-sm text-left">
           <tbody>
             <tr><td class="font-semibold">Rank</td><td>${item.rank}</td></tr>
-            <tr><td class="font-semibold">Growth Rate</td><td>${
-              item.score
-            }</td></tr>
+            <tr><td class="font-semibold">Growth Rate</td><td>${item.score.toLocaleString()}</td></tr>
             <tr><td class="font-semibold">Realm</td><td>${
               item.RealmName
             }</td></tr>
@@ -103,6 +123,13 @@ async function searchIGN() {
             ).toLocaleString()}</td></tr>
           </tbody>
         </table>
+         ${
+           giphyUrl
+             ? `<div class="mt-4">
+                <img src="${giphyUrl}" alt="Random Meme" class="rounded-lg shadow-md w-full" />
+              </div>`
+             : ""
+         }
       </div>
     `;
   } catch (err) {

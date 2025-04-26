@@ -4,7 +4,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import NodeCache from "node-cache";
 import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
+
 import { rankingTypes, regions, weaponTypes } from "./utils/constants.js";
+
+dotenv.config();
 
 // Needed because __dirname isn't available in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -46,6 +50,11 @@ app.use((req, res, next) => {
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Expose Giphy API key via an endpoint (optional, for frontend use)
+app.get("/api/giphy-key", (req, res) => {
+  res.json({ apiKey: process.env.GIPHY_API_KEY });
+});
+
 // metadata
 app.get("/api/metadata", (req, res) => {
   console.log({ called: "/api/metadata" });
@@ -62,8 +71,6 @@ app.get("/api/growth", async (req, res) => {
 
   const cacheKey = [ign, regionCode].join("").toLowerCase();
   const cached = cache.get(cacheKey);
-
-  console.log({ cached });
 
   if (cached) {
     return res.json(cached);
