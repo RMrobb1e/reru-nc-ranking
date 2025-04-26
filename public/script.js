@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const option = document.createElement("option");
       option.value = region.code;
       option.textContent = region.name;
+
+      if (region.code === 2020) {
+        option.selected = true;
+      }
+
       regionSelect.appendChild(option);
     });
   }
