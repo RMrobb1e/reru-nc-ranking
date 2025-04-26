@@ -77,6 +77,9 @@ async function searchIGN() {
     return;
   }
 
+  searchButton.disabled = true;
+  searchButton.classList.add("opacity-50", "cursor-not-allowed");
+
   // Show loading spinner
   resultArea.innerHTML = `
     <div class="flex justify-center items-center">
@@ -140,5 +143,9 @@ async function searchIGN() {
   } catch (err) {
     resultArea.innerHTML = `<p class='text-red-500'>Failed to fetch data. Try again later.</p>`;
     console.error(err);
+  } finally {
+    // Re-enable the search button
+    searchButton.disabled = false;
+    searchButton.classList.remove("opacity-50", "cursor-not-allowed");
   }
 }
