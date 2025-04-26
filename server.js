@@ -10,6 +10,30 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const weaponTypes = {
+  Bow: 21,
+  OneHanded: 13,
+  TwinSword: 12,
+  Staff: 31,
+  Wand: 32,
+  TwoHanded: 11,
+  Spear: 14,
+  Dagger: 22,
+  Rapier: 23,
+};
+
+const regionCodes = {
+  AsiaI: 2010,
+  AsiaII: 2020,
+  Naeu: 3010,
+  Sa: 4010,
+};
+
+const rankingTypes = {
+  growth: "growth",
+  level: "level",
+};
+
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
