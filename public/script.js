@@ -31,7 +31,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+
+  loadBookmarks();
 });
+
+// Bookmark management functions
+function loadBookmarks() {
+  const bookmarks = JSON.parse(localStorage.getItem("ignBookmarks") || "[]");
+  const bookmarksContainer = document.getElementById("bookmarks");
+
+  bookmarksContainer.innerHTML = bookmarks
+    .map(
+      (bookmark) => `
+    <button 
+      onclick="selectBookmark('${bookmark.ign}', '${bookmark.region}')"
+      class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm flex items-center gap-2"
+    >
+      ${bookmark.ign}
+      <span onclick="event.stopPropagation(); removeBookmark('${bookmark.ign}')" class="text-gray-400 hover:text-red-500">×</span>
+    </button>
+  `,
+    )
+    .join("");
+}
+
+function toggleBookmark() {
+  const ign = document.getElementById("ignInput").value.trim();
+  const region = document.getElementById("regionSelect").value;
+
+  if (!ign) return;
+
+  const bookmarks = JSON.parse(localStorage.getItem("ignBookmarks") || "[]");
+  const exists = bookmarks.some((b) => b.ign === ign);
+
+  if (exists) {
+    removeBookmark(ign);
+  } else {
+    bookmarks.push({ ign, region });
+    localStorage.setItem("ignBookmarks", JSON.stringify(bookmarks));
+    loadBookmarks();
+  }
+}
+
+function removeBookmark(ign) {
+  const bookmarks = JSON.parse(localStorage.getItem("ignBookmarks") || "[]");
+  const filtered = bookmarks.filter((b) => b.ign !== ign);
+  localStorage.setItem("ignBookmarks", JSON.stringify(filtered));
+  loadBookmarks();
+}
+
+function selectBookmark(ign, region) {
+  document.getElementById("ignInput").value = ign;
+  document.getElementById("regionSelect").value = region;
+  searchIGN();
+}
 
 async function fetchGiphyMeme() {
   try {
@@ -72,6 +125,13 @@ async function searchIGN() {
   const resultArea = document.getElementById("resultArea");
   resultArea.innerHTML = "";
   const regionCode = document.getElementById("regionSelect").value; // Get selected region
+
+  // Update bookmark button appearance
+  const bookmarks = JSON.parse(localStorage.getItem("ignBookmarks") || "[]");
+  const isBookmarked = bookmarks.some((b) => b.ign === ign);
+  bookmarkButton.querySelector("svg").style.fill = isBookmarked
+    ? "currentColor"
+    : "none";
 
   if (!ign) {
     resultArea.innerHTML = "<p class='text-red-500'>Please enter an IGN.</p>";

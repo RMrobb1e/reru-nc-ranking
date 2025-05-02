@@ -19,12 +19,23 @@
       <select id="regionSelect" class="p-3 border rounded-lg">
         <!-- Will be populated via script.js -->
       </select>
-
-      <input type="text" id="ignInput" placeholder="Enter ASIA II IGN" class="w-full p-3 border rounded-lg" />
+      <div class="relative flex-1">
+        <input type="text" id="ignInput" placeholder="Enter ASIA II IGN" class="w-full p-3 border rounded-lg" />
+        <button id="bookmarkButton" onclick="toggleBookmark()"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-yellow-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+        </button>
+      </div>
       <button id="searchButton" onclick="searchIGN()"
         class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700">
         Search
       </button>
+    </div>
+    <div id="bookmarks" class="flex flex-wrap gap-2 mb-4">
+      <!-- Bookmarks will be populated here -->
     </div>
     <div id="resultArea" class="mt-6"></div>
   </div>
