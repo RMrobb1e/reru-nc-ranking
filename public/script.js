@@ -1,7 +1,14 @@
-const API_BASE =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://nc-ranking-backend.robbie-ad5.workers.dev"; // <- replace with your Cloudflare Worker URL
+const API_BASE = (() => {
+  const hostname = window.location.hostname;
+  switch (hostname) {
+    case "localhost":
+      return "http://localhost:3000";
+    case "reru-nc-ranking.onrender.com":
+      return "https://reru-nc-ranking.onrender.com";
+    default:
+      return "https://nc-ranking-backend.robbie-ad5.workers.dev";
+  }
+})(); // <- replace with your Cloudflare Worker URL
 
 let debounceTimer; // Declare a variable to hold the debounce timer
 
