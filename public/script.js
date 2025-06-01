@@ -1,3 +1,8 @@
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://nc-ranking-backend.robbie-ad5.workers.dev"; // <- replace with your Cloudflare Worker URL
+
 let debounceTimer; // Declare a variable to hold the debounce timer
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -88,7 +93,7 @@ function selectBookmark(ign, region) {
 
 async function fetchGiphyMeme() {
   try {
-    const keyResponse = await fetch("/api/giphy-key");
+    const keyResponse = await fetch(`${API_BASE}/api/giphy-key`);
     const { apiKey } = await keyResponse.json();
 
     if (!apiKey) {
@@ -109,7 +114,7 @@ async function fetchGiphyMeme() {
 
 async function fetchMetadata() {
   try {
-    const response = await fetch("/api/metadata");
+    const response = await fetch(`${API_BASE}/api/metadata`);
     const data = await response.json();
 
     return data;
