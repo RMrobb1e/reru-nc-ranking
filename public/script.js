@@ -153,7 +153,7 @@ async function searchIGN() {
     </div>
   `;
 
-  const url = `/api/growth?ign=${encodeURIComponent(
+  const url = `${API_BASE}/api/growth?ign=${encodeURIComponent(
     ign,
   )}&regionCode=${regionCode}`;
 
