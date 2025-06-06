@@ -79,8 +79,9 @@ app.get("/api/growth", async (req, res) => {
   // const regionCode = "0"; // Default region code
   const rankingType = "growth"; // Default ranking type
   const weaponType = "0"; // Default weapon type
+  const ncKey = "RurW1g27YvYnU6QRxphBf";
 
-  const url = `https://www.nightcrows.com/_next/data/gS2eBBlYqbNdFFZodjSYl/en/ranking/growth.json?regionCode=${regionCode}&weaponType=${weaponType}&wmsso_sign=check&keyword=${encodeURIComponent(
+  const url = `https://www.nightcrows.com/_next/data/${ncKey}/en/ranking/growth.json?regionCode=${regionCode}&weaponType=${weaponType}&wmsso_sign=check&keyword=${encodeURIComponent(
     ign,
   )}&rankingType=${rankingType}`;
 
