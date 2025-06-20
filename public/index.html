@@ -26,6 +26,22 @@
 </head>
 
 <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <!-- Password Modal Overlay -->
+  <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+    style="backdrop-filter: blur(2px);">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 w-full max-w-xs flex flex-col items-center">
+      <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">Enter Password</h2>
+      <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password"
+        class="w-full mb-4 p-3 border rounded-lg text-center dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <button id="passwordSubmit"
+        class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+        Enter
+      </button>
+      <p id="passwordError"
+        class="text-red-500 dark:text-red-400 text-sm mt-3 hidden">Incorrect password. Please try again.</p>
+    </div>
+  </div>
+
   <div
     class="max-w-3xl mx-auto p-6 mt-10 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-300">
     <div class="flex justify-between items-center mb-4">
@@ -106,6 +122,47 @@
     darkModeToggle.addEventListener('click', () => {
       setDarkMode(!html.classList.contains('dark'));
     });
+
+    // Password modal logic
+    const passwordModal = document.getElementById('passwordModal');
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordSubmit = document.getElementById('passwordSubmit');
+    const passwordError = document.getElementById('passwordError');
+    const PASSWORD = 'F0REST';
+    // Focus input on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (passwordModal) passwordInput.focus();
+    });
+    function unlockSite() {
+      passwordModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    function showError() {
+      passwordError.classList.remove('hidden');
+      passwordInput.classList.add('border-red-500');
+    }
+    function hideError() {
+      passwordError.classList.add('hidden');
+      passwordInput.classList.remove('border-red-500');
+    }
+    passwordSubmit.addEventListener('click', () => {
+      if (passwordInput.value === PASSWORD) {
+        unlockSite();
+      } else {
+        showError();
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    });
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        passwordSubmit.click();
+      } else {
+        hideError();
+      }
+    });
+    // Prevent scrolling when modal is open
+    if (passwordModal) document.body.style.overflow = 'hidden';
   </script>
 </body>
 
