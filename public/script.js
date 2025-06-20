@@ -355,10 +355,10 @@ function loadBookmarks() {
       (bookmark) => `
     <button 
       onclick="selectBookmark('${bookmark.ign}', '${bookmark.region}')"
-      class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm flex items-center gap-2"
+      class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm flex items-center gap-2 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100"
     >
       ${bookmark.ign}
-      <span onclick="event.stopPropagation(); removeBookmark('${bookmark.ign}')" class="text-gray-400 hover:text-red-500">×</span>
+      <span onclick="event.stopPropagation(); removeBookmark('${bookmark.ign}')" class="text-gray-400 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">×</span>
     </button>
   `,
     )
