@@ -343,6 +343,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+  // Add click event for search button
+  const searchButton = document.getElementById("searchButton");
+  if (searchButton) {
+    searchButton.addEventListener("click", searchIGN);
+  }
 
   loadBookmarks();
   renderTop1000();
@@ -434,7 +439,7 @@ async function fetchMetadata() {
 
 async function searchIGN() {
   const ign = document.getElementById("ignInput").value.trim();
-  const searchButton = document.querySelector("button[onclick='searchIGN()']");
+  const searchButton = document.getElementById("searchButton");
   const resultArea = document.getElementById("resultArea");
   resultArea.innerHTML = "";
   const regionCode = document.getElementById("regionSelect").value; // Get selected region
@@ -442,9 +447,12 @@ async function searchIGN() {
   // Update bookmark button appearance
   const bookmarks = JSON.parse(localStorage.getItem("ignBookmarks") || "[]");
   const isBookmarked = bookmarks.some((b) => b.ign === ign);
-  bookmarkButton.querySelector("svg").style.fill = isBookmarked
-    ? "currentColor"
-    : "none";
+  const bookmarkButton = document.getElementById("bookmarkButton");
+  if (bookmarkButton) {
+    bookmarkButton.querySelector("svg").style.fill = isBookmarked
+      ? "currentColor"
+      : "none";
+  }
 
   if (!ign) {
     resultArea.innerHTML =
