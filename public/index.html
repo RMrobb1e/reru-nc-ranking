@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark:bg-gray-900">
 
 <head>
   <meta charset="UTF-8" />
@@ -9,36 +9,104 @@
   <title>Reru - Night Crows Growth Ranking</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind dark mode config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+          },
+        },
+      },
+    };
+  </script>
   <script src="script.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
-  <div class="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-2xl shadow-lg">
-    <h1 class="text-2xl font-bold mb-4">Night Crows Growth Ranking Search</h1>
-    <div class="flex items-center gap-4 mb-6">
-      <select id="regionSelect" class="p-3 border rounded-lg">
-        <!-- Will be populated via script.js -->
-      </select>
-      <div class="relative flex-1">
-        <input type="text" id="ignInput" placeholder="Enter ASIA II IGN" class="w-full p-3 border rounded-lg" />
-        <button id="bookmarkButton" onclick="toggleBookmark()"
-          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-yellow-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-          </svg>
-        </button>
-      </div>
-      <button id="searchButton" onclick="searchIGN()"
-        class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700">
-        Search
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <div
+    class="max-w-3xl mx-auto p-6 mt-10 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Night Crows Growth Ranking Search</h1>
+      <button id="darkModeToggle" aria-label="Toggle dark mode"
+        class="rounded-full p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+        <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-200"
+          fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path id="sunIcon" class="block dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.93l-.71-.71M12 5a7 7 0 100 14 7 7 0 000-14z" />
+          <path id="moonIcon" class="hidden dark:block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+        </svg>
       </button>
     </div>
-    <div id="bookmarks" class="flex flex-wrap gap-2 mb-4">
-      <!-- Bookmarks will be populated here -->
+    <div id="top100Section">
+      <div class="flex justify-between items-center mb-6">
+        <span class="text-lg font-semibold">Top 1000 Players</span>
+        <button id="showSearchBtn"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+          Search by IGN
+        </button>
+      </div>
+      <div id="top100TableArea" class="overflow-x-auto"></div>
     </div>
-    <div id="resultArea" class="mt-6"></div>
+    <div id="searchSection" style="display:none;">
+      <div class="flex items-center gap-4 mb-6">
+        <select id="regionSelect"
+          class="p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100">
+          <!-- Will be populated via script.js -->
+        </select>
+        <div class="relative flex-1">
+          <input type="text" id="ignInput" placeholder="Enter ASIA II IGN"
+            class="w-full p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400" />
+          <button id="bookmarkButton" onclick="toggleBookmark()"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+          </button>
+        </div>
+        <button id="searchButton"
+          class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+          Search
+        </button>
+        <button id="showTop100Btn"
+          class="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 transition-colors">
+          Show Top 1000
+        </button>
+      </div>
+      <div id="bookmarks" class="flex flex-wrap gap-2 mb-4">
+        <!-- Bookmarks will be populated here -->
+      </div>
+      <div id="resultArea" class="mt-6"></div>
+    </div>
   </div>
+  <script>
+    // Dark mode toggle logic
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    function setDarkMode(on) {
+      if (on) {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    // Initial mode
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+    darkModeToggle.addEventListener('click', () => {
+      setDarkMode(!html.classList.contains('dark'));
+    });
+  </script>
 </body>
 
 </html>
