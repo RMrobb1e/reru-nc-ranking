@@ -222,9 +222,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (currentPage > totalPages) currentPage = 1;
       window.__top1000CurrentPage = currentPage;
 
-      function renderPagination() {
+      function renderPagination(pages) {
         let html = '<div class="flex justify-center my-4 gap-2">';
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 1; i <= pages; i++) {
           html += `<button class="px-3 py-1 rounded ${
             i === currentPage
               ? "bg-blue-600 text-white"
@@ -258,25 +258,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
       }
 
-      // Slice items for current page if we have all 1000, else just use items
+      // If filtered results are 100 or fewer, show all and remove pagination
       let pagedItems = filteredItems;
-      if (window.__top1000Cache && window.__top1000Cache[regionCode]) {
+      let showPagination = true;
+      if (filteredItems.length <= pageSize) {
+        pagedItems = filteredItems;
+        showPagination = false;
+      } else if (window.__top1000Cache && window.__top1000Cache[regionCode]) {
         pagedItems = filteredItems.slice(
           (currentPage - 1) * pageSize,
           currentPage * pageSize,
         );
+        showPagination = true;
       }
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
-        renderTop1000Table(pagedItems) + renderPagination();
+        renderTop1000Table(pagedItems) +
+        (showPagination
+          ? renderPagination(Math.ceil(filteredItems.length / pageSize))
+          : "");
 
       // Add event listeners for pagination buttons
-      top1000TableArea.querySelectorAll("button[data-page]").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          window.__top1000CurrentPage = Number(btn.getAttribute("data-page"));
-          renderTop1000();
-        });
-      });
+      if (showPagination) {
+        top1000TableArea
+          .querySelectorAll("button[data-page]")
+          .forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              window.__top1000CurrentPage = Number(
+                btn.getAttribute("data-page"),
+              );
+              renderTop1000();
+            });
+          });
+      }
     } catch (err) {
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
@@ -286,12 +300,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Table rendering helper
   function renderTop1000Table(players) {
+    // Weapon type mapping
+    const weaponTypeMap = {
+      0: "All",
+      21: "Bow",
+      13: "OneHanded",
+      12: "TwinSword",
+      31: "Staff",
+      32: "Wand",
+      11: "TwoHanded",
+      14: "Spear",
+      22: "Dagger",
+      23: "Rapier",
+    };
     return `<table class="min-w-full text-sm text-left border">
       <thead class="bg-gray-100 dark:bg-gray-700">
         <tr>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Rank</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">IGN</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Growth Rate</th>
+          <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Weapon Type</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Realm</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Region</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Guild</th>
@@ -300,21 +328,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       </thead>
       <tbody>
         ${players
-          .map(
-            (p) => `
+          .map((p) => {
+            let badge = "";
+            if (p.rank === 1)
+              badge =
+                '<img src="top-1.png" alt="Top 1" title="Top 1" class="inline w-6 h-6 align-middle mr-1" />';
+            else if (p.rank === 2)
+              badge =
+                '<img src="top-2.png" alt="Top 2" title="Top 2" class="inline w-6 h-6 align-middle mr-1" />';
+            else if (p.rank === 3)
+              badge =
+                '<img src="top-3.png" alt="Top 3" title="Top 3" class="inline w-6 h-6 align-middle mr-1" />';
+            else if (p.rank === 4)
+              badge =
+                '<img src="top-4.png" alt="Top 4" title="Top 4" class="inline w-6 h-6 align-middle mr-1" />';
+            else if (p.rank === 5)
+              badge =
+                '<img src="top-5.png" alt="Top 5" title="Top 5" class="inline w-6 h-6 align-middle mr-1" />';
+            const weaponType = weaponTypeMap[p.pcWeaponType] || "";
+            return `
           <tr>
             <td class="px-3 py-2 border">${p.rank}</td>
-            <td class="px-3 py-2 border">${p.CharacterName}</td>
+            <td class="px-3 py-2 border flex items-center gap-2">${badge}${
+              p.CharacterName
+            }</td>
             <td class="px-3 py-2 border">${Number(
               p.score,
             ).toLocaleString()}</td>
+            <td class="px-3 py-2 border">${weaponType}</td>
             <td class="px-3 py-2 border">${p.RealmName}</td>
             <td class="px-3 py-2 border">${p.RegionName}</td>
             <td class="px-3 py-2 border">${p.GuildName || ""}</td>
             <td class="px-3 py-2 border">${p.GuildUnionName || ""}</td>
           </tr>
-        `,
-          )
+        `;
+          })
           .join("")}
       </tbody>
     </table>`;
