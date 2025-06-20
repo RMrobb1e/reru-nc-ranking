@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!top1000RegionSelect) {
     top1000RegionSelect = document.createElement("select");
     top1000RegionSelect.id = "top100RegionSelect";
-    top1000RegionSelect.className = "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100";
+    top1000RegionSelect.className =
+      "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100";
     top1000Section.insertBefore(
       top1000RegionSelect,
       top1000Section.children[2],
@@ -81,7 +82,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     guildFilterInput.id = "guildFilterInput";
     guildFilterInput.type = "text";
     guildFilterInput.placeholder = "Filter by Guild";
-    guildFilterInput.className = "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
+    guildFilterInput.className =
+      "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
     top1000Section.insertBefore(guildFilterInput, top1000Section.children[3]);
   }
   let unionFilterInput = document.getElementById("unionFilterInput");
@@ -90,7 +92,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     unionFilterInput.id = "unionFilterInput";
     unionFilterInput.type = "text";
     unionFilterInput.placeholder = "Filter by Union";
-    unionFilterInput.className = "p-2 border rounded-lg mb-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
+    unionFilterInput.className =
+      "p-2 border rounded-lg mb-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
     top1000Section.insertBefore(unionFilterInput, top1000Section.children[4]);
   }
 
@@ -144,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // --- Prefill filters from URL query params on load ---
   function getQueryParam(name) {
     const url = new URL(window.location.href);
-    return url.searchParams.get(name) || '';
+    return url.searchParams.get(name) || "";
   }
   function setQueryParam(name, value) {
     const url = new URL(window.location.href);
@@ -153,21 +156,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       url.searchParams.delete(name);
     }
-    window.history.replaceState({}, '', url);
+    window.history.replaceState({}, "", url);
   }
 
   // Prefill filter inputs from URL
-  guildFilterInput.value = getQueryParam('guild') || '';
-  unionFilterInput.value = getQueryParam('union') || '';
+  guildFilterInput.value = getQueryParam("guild") || "";
+  unionFilterInput.value = getQueryParam("union") || "";
 
   // Update URL when filters change
-  guildFilterInput.addEventListener('input', () => {
-    setQueryParam('guild', guildFilterInput.value.trim());
+  guildFilterInput.addEventListener("input", () => {
+    setQueryParam("guild", guildFilterInput.value.trim());
     window.__top1000CurrentPage = 1;
     renderTop1000();
   });
-  unionFilterInput.addEventListener('input', () => {
-    setQueryParam('union', unionFilterInput.value.trim());
+  unionFilterInput.addEventListener("input", () => {
+    setQueryParam("union", unionFilterInput.value.trim());
     window.__top1000CurrentPage = 1;
     renderTop1000();
   });

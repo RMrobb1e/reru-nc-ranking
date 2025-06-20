@@ -27,18 +27,18 @@
 
 <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
   <!-- Password Modal Overlay -->
-  <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+  <div id="rerunenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
     style="backdrop-filter: blur(2px);">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 w-full max-w-xs flex flex-col items-center">
-      <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">Enter Password</h2>
-      <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password"
+      <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">Enter Site Key</h2>
+      <input id="rerunenInput" type="password" placeholder="Site Key" autocomplete="current-password"
         class="w-full mb-4 p-3 border rounded-lg text-center dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <button id="passwordSubmit"
+      <button id="rerunenSubmit"
         class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
         Enter
       </button>
-      <p id="passwordError"
-        class="text-red-500 dark:text-red-400 text-sm mt-3 hidden">Incorrect password. Please try again.</p>
+      <p id="rerunenError" class="text-red-500 dark:text-red-400 text-sm mt-3 hidden">Incorrect key. Please try again.
+      </p>
     </div>
   </div>
 
@@ -123,46 +123,53 @@
       setDarkMode(!html.classList.contains('dark'));
     });
 
-    // Password modal logic
-    const passwordModal = document.getElementById('passwordModal');
-    const passwordInput = document.getElementById('passwordInput');
-    const passwordSubmit = document.getElementById('passwordSubmit');
-    const passwordError = document.getElementById('passwordError');
-    const PASSWORD = 'F0REST';
-    // Focus input on load
+    // Site key modal logic
+    const rerunenModal = document.getElementById('rerunenModal');
+    const rerunenInput = document.getElementById('rerunenInput');
+    const rerunenSubmit = document.getElementById('rerunenSubmit');
+    const rerunenError = document.getElementById('rerunenError');
+    const RERU_KEY = 'rerunc';
+    const RERU_KEY_STORAGE = 'siteKeyEntered';
+    // Focus input on load, or skip modal if already entered
     window.addEventListener('DOMContentLoaded', () => {
-      if (passwordModal) passwordInput.focus();
+      if (localStorage.getItem(RERU_KEY_STORAGE) === RERU_KEY) {
+        rerunenModal.style.display = 'none';
+        document.body.style.overflow = '';
+      } else {
+        if (rerunenModal) rerunenInput.focus();
+      }
     });
     function unlockSite() {
-      passwordModal.style.display = 'none';
+      rerunenModal.style.display = 'none';
       document.body.style.overflow = '';
+      localStorage.setItem(RERU_KEY_STORAGE, RERU_KEY);
     }
     function showError() {
-      passwordError.classList.remove('hidden');
-      passwordInput.classList.add('border-red-500');
+      rerunenError.classList.remove('hidden');
+      rerunenInput.classList.add('border-red-500');
     }
     function hideError() {
-      passwordError.classList.add('hidden');
-      passwordInput.classList.remove('border-red-500');
+      rerunenError.classList.add('hidden');
+      rerunenInput.classList.remove('border-red-500');
     }
-    passwordSubmit.addEventListener('click', () => {
-      if (passwordInput.value === PASSWORD) {
+    rerunenSubmit.addEventListener('click', () => {
+      if (rerunenInput.value === RERU_KEY) {
         unlockSite();
       } else {
         showError();
-        passwordInput.value = '';
-        passwordInput.focus();
+        rerunenInput.value = '';
+        rerunenInput.focus();
       }
     });
-    passwordInput.addEventListener('keydown', (e) => {
+    rerunenInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        passwordSubmit.click();
+        rerunenSubmit.click();
       } else {
         hideError();
       }
     });
     // Prevent scrolling when modal is open
-    if (passwordModal) document.body.style.overflow = 'hidden';
+    if (rerunenModal && localStorage.getItem(RERU_KEY_STORAGE) !== RERU_KEY) document.body.style.overflow = 'hidden';
   </script>
 </body>
 
