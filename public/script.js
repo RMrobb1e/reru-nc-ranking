@@ -65,27 +65,76 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
   }
 
-  // Add guild and union filter inputs
+  // Add guild and union filter inputs with reset buttons
   let guildFilterInput = document.getElementById("guildFilterInput");
+  let guildFilterResetBtn = document.getElementById("guildFilterResetBtn");
   if (!guildFilterInput) {
+    // Create a wrapper div for input and reset button
+    const guildFilterWrapper = document.createElement("div");
+    guildFilterWrapper.className = "inline-flex items-center mb-2 mr-2";
+    // Input
     guildFilterInput = document.createElement("input");
     guildFilterInput.id = "guildFilterInput";
     guildFilterInput.type = "text";
     guildFilterInput.placeholder = "Filter by Guild";
     guildFilterInput.className =
-      "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
-    top1000Section.insertBefore(guildFilterInput, top1000Section.children[2]);
+      "p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
+    // Reset button
+    guildFilterResetBtn = document.createElement("button");
+    guildFilterResetBtn.id = "guildFilterResetBtn";
+    guildFilterResetBtn.type = "button";
+    guildFilterResetBtn.title = "Reset Guild Filter";
+    guildFilterResetBtn.className = "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
+    guildFilterResetBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    // Append input and button to wrapper
+    guildFilterWrapper.appendChild(guildFilterInput);
+    guildFilterWrapper.appendChild(guildFilterResetBtn);
+    // Insert wrapper
+    top1000Section.insertBefore(guildFilterWrapper, top1000Section.children[2]);
   }
 
   let unionFilterInput = document.getElementById("unionFilterInput");
+  let unionFilterResetBtn = document.getElementById("unionFilterResetBtn");
   if (!unionFilterInput) {
+    // Create a wrapper div for input and reset button
+    const unionFilterWrapper = document.createElement("div");
+    unionFilterWrapper.className = "inline-flex items-center mb-2";
+    // Input
     unionFilterInput = document.createElement("input");
     unionFilterInput.id = "unionFilterInput";
     unionFilterInput.type = "text";
     unionFilterInput.placeholder = "Filter by Union";
     unionFilterInput.className =
-      "p-2 border rounded-lg mb-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
-    top1000Section.insertBefore(unionFilterInput, top1000Section.children[3]);
+      "p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
+    // Reset button
+    unionFilterResetBtn = document.createElement("button");
+    unionFilterResetBtn.id = "unionFilterResetBtn";
+    unionFilterResetBtn.type = "button";
+    unionFilterResetBtn.title = "Reset Union Filter";
+    unionFilterResetBtn.className = "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
+    unionFilterResetBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    // Append input and button to wrapper
+    unionFilterWrapper.appendChild(unionFilterInput);
+    unionFilterWrapper.appendChild(unionFilterResetBtn);
+    // Insert wrapper
+    top1000Section.insertBefore(unionFilterWrapper, top1000Section.children[3]);
+  }
+  // Reset filter button event listeners
+  if (guildFilterResetBtn) {
+    guildFilterResetBtn.addEventListener("click", () => {
+      guildFilterInput.value = "";
+      setQueryParam("guild", "");
+      window.__top1000CurrentPage = 1;
+      renderTop1000();
+    });
+  }
+  if (unionFilterResetBtn) {
+    unionFilterResetBtn.addEventListener("click", () => {
+      unionFilterInput.value = "";
+      setQueryParam("union", "");
+      window.__top1000CurrentPage = 1;
+      renderTop1000();
+    });
   }
 
   // Loader element for top 1000
