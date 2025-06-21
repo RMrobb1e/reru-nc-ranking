@@ -52,16 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const showTop1000Btn = document.getElementById("showTop100Btn");
   const top1000TableArea = document.getElementById("top100TableArea");
 
-  // Loader element for top 1000
-  let top1000Loader = document.getElementById("top1000Loader");
-  if (!top1000Loader) {
-    top1000Loader = document.createElement("div");
-    top1000Loader.id = "top1000Loader";
-    top1000Loader.innerHTML = `<div class="flex justify-center items-center py-8"><div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div></div>`;
-    top1000Loader.style.display = "none";
-    top1000Section.insertBefore(top1000Loader, top1000Section.children[1]);
-  }
-
   // Add region, guild, and union filter for top 1000
   let top1000RegionSelect = document.getElementById("top100RegionSelect");
   if (!top1000RegionSelect) {
@@ -71,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100";
     top1000Section.insertBefore(
       top1000RegionSelect,
-      top1000Section.children[2],
+      top1000Section.children[1],
     );
   }
 
@@ -84,8 +74,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     guildFilterInput.placeholder = "Filter by Guild";
     guildFilterInput.className =
       "p-2 border rounded-lg mb-2 mr-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
-    top1000Section.insertBefore(guildFilterInput, top1000Section.children[3]);
+    top1000Section.insertBefore(guildFilterInput, top1000Section.children[2]);
   }
+
   let unionFilterInput = document.getElementById("unionFilterInput");
   if (!unionFilterInput) {
     unionFilterInput = document.createElement("input");
@@ -94,7 +85,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     unionFilterInput.placeholder = "Filter by Union";
     unionFilterInput.className =
       "p-2 border rounded-lg mb-2 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
-    top1000Section.insertBefore(unionFilterInput, top1000Section.children[4]);
+    top1000Section.insertBefore(unionFilterInput, top1000Section.children[3]);
+  }
+
+  // Loader element for top 1000
+  let top1000Loader = document.getElementById("top1000Loader");
+  if (!top1000Loader) {
+    top1000Loader = document.createElement("div");
+    top1000Loader.id = "top1000Loader";
+    top1000Loader.innerHTML = `<div class="flex justify-center items-center py-8"><div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div></div>`;
+    top1000Loader.style.display = "none";
+    top1000Section.insertBefore(top1000Loader, top1000Section.children[4]);
   }
 
   // Populate top 1000 region select
