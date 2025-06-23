@@ -57,7 +57,6 @@ app.get("/api/giphy-key", (req, res) => {
 
 // metadata
 app.get("/api/metadata", (req, res) => {
-  console.log({ called: "/api/metadata" });
   res.json({ regions, weaponTypes, rankingTypes });
 });
 

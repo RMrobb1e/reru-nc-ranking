@@ -123,32 +123,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Insert wrapper
     top1000Section.insertBefore(unionFilterWrapper, top1000Section.children[3]);
   }
-  // Reset filter button event listeners
-  if (guildFilterResetBtn) {
-    guildFilterResetBtn.addEventListener("click", () => {
-      guildFilterInput.value = "";
-      setQueryParam("guild", "");
-      window.__top1000CurrentPage = 1;
-      renderTop1000();
-    });
+
+  // Add realm filter input with reset button
+  let realmFilterInput = document.getElementById("realmFilterInput");
+  let realmFilterResetBtn = document.getElementById("realmFilterResetBtn");
+  if (!realmFilterInput) {
+    const realmFilterWrapper = document.createElement("div");
+    realmFilterWrapper.className = "inline-flex items-center mb-2 mr-2";
+    realmFilterInput = document.createElement("input");
+    realmFilterInput.id = "realmFilterInput";
+    realmFilterInput.type = "text";
+    realmFilterInput.placeholder = "Filter by Realm";
+    realmFilterInput.className =
+      "p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400";
+    realmFilterResetBtn = document.createElement("button");
+    realmFilterResetBtn.id = "realmFilterResetBtn";
+    realmFilterResetBtn.type = "button";
+    realmFilterResetBtn.title = "Reset Realm Filter";
+    realmFilterResetBtn.className =
+      "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
+    realmFilterResetBtn.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    realmFilterWrapper.appendChild(realmFilterInput);
+    realmFilterWrapper.appendChild(realmFilterResetBtn);
+    top1000Section.insertBefore(realmFilterWrapper, top1000Section.children[3]);
   }
-  if (unionFilterResetBtn) {
-    unionFilterResetBtn.addEventListener("click", () => {
-      unionFilterInput.value = "";
-      setQueryParam("union", "");
+  if (realmFilterResetBtn) {
+    realmFilterResetBtn.addEventListener("click", () => {
+      realmFilterInput.value = "";
+      setQueryParam("realm", "");
       window.__top1000CurrentPage = 1;
       renderTop1000();
     });
   }
 
-  // Loader element for top 1000
+  // Loader element for top 1000 (after all filters)
   let top1000Loader = document.getElementById("top1000Loader");
   if (!top1000Loader) {
     top1000Loader = document.createElement("div");
     top1000Loader.id = "top1000Loader";
     top1000Loader.innerHTML = `<div class="flex justify-center items-center py-8"><div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div></div>`;
     top1000Loader.style.display = "none";
-    top1000Section.insertBefore(top1000Loader, top1000Section.children[4]);
+    // Insert after all filter wrappers (region, guild, union, realm)
+    // Find the last filter wrapper
+    const filterWrappers = top1000Section.querySelectorAll('div.inline-flex.items-center');
+    if (filterWrappers.length > 0) {
+      const lastFilter = filterWrappers[filterWrappers.length - 1];
+      lastFilter.after(top1000Loader);
+    } else {
+      // Fallback: insert after region select
+      top1000Section.insertBefore(top1000Loader, top1000Section.children[4]);
+    }
   }
 
   // Populate top 1000 region select
@@ -216,6 +241,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Prefill filter inputs from URL
   guildFilterInput.value = getQueryParam("guild") || "";
   unionFilterInput.value = getQueryParam("union") || "";
+  realmFilterInput.value = getQueryParam("realm") || "";
 
   // Update URL when filters change
   guildFilterInput.addEventListener("input", () => {
@@ -225,6 +251,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   unionFilterInput.addEventListener("input", () => {
     setQueryParam("union", unionFilterInput.value.trim());
+    window.__top1000CurrentPage = 1;
+    renderTop1000();
+  });
+  realmFilterInput.addEventListener("input", () => {
+    setQueryParam("realm", realmFilterInput.value.trim());
     window.__top1000CurrentPage = 1;
     renderTop1000();
   });
@@ -289,7 +320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return html;
       }
 
-      // Filter by guild/union if set
+      // Filter by guild/union/realm if set
       const guildFilter =
         document
           .getElementById("guildFilterInput")
@@ -298,6 +329,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const unionFilter =
         document
           .getElementById("unionFilterInput")
+          ?.value.trim()
+          .toLowerCase() || "";
+      const realmFilter =
+        document
+          .getElementById("realmFilterInput")
           ?.value.trim()
           .toLowerCase() || "";
       let filteredItems = items;
@@ -310,6 +346,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         filteredItems = filteredItems.filter((p) =>
           (p.GuildUnionName || "").toLowerCase().includes(unionFilter),
         );
+      }
+      if (realmFilter) {
+        filteredItems = filteredItems.filter((p) => {
+          const realmDisplay =
+            (p.RealmGroupName ? p.RealmGroupName + "/" : "") +
+            (p.RealmName || "");
+          return realmDisplay.toLowerCase().includes(realmFilter);
+        });
       }
 
       // If filtered results are 100 or fewer, show all and remove pagination
@@ -399,8 +443,10 @@ document.addEventListener("DOMContentLoaded", async () => {
               badge =
                 '<img src="top-5.png" alt="Top 5" title="Top 5" class="inline w-6 h-6 align-middle mr-1" />';
             const weaponType = weaponTypeMap[p.pcWeaponType] || "";
-            // Concatenate RealmGroupName and RealmName for Realm column (no space)
-            const realmDisplay = (p.RealmGroupName || "") + (p.RealmName || "");
+            // Concatenate RealmGroupName and RealmName for Realm column with '/'
+            const realmDisplay =
+              (p.RealmGroupName ? p.RealmGroupName + "/" : "") +
+              (p.RealmName || "");
             return `
           <tr>
             <td class="px-3 py-2 border">${p.rank}</td>
