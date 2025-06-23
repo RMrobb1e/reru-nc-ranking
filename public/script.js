@@ -84,8 +84,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     guildFilterResetBtn.id = "guildFilterResetBtn";
     guildFilterResetBtn.type = "button";
     guildFilterResetBtn.title = "Reset Guild Filter";
-    guildFilterResetBtn.className = "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
-    guildFilterResetBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    guildFilterResetBtn.className =
+      "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
+    guildFilterResetBtn.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
     // Append input and button to wrapper
     guildFilterWrapper.appendChild(guildFilterInput);
     guildFilterWrapper.appendChild(guildFilterResetBtn);
@@ -111,8 +113,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     unionFilterResetBtn.id = "unionFilterResetBtn";
     unionFilterResetBtn.type = "button";
     unionFilterResetBtn.title = "Reset Union Filter";
-    unionFilterResetBtn.className = "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
-    unionFilterResetBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    unionFilterResetBtn.className =
+      "ml-1 px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100";
+    unionFilterResetBtn.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
     // Append input and button to wrapper
     unionFilterWrapper.appendChild(unionFilterInput);
     unionFilterWrapper.appendChild(unionFilterResetBtn);
@@ -395,8 +399,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               badge =
                 '<img src="top-5.png" alt="Top 5" title="Top 5" class="inline w-6 h-6 align-middle mr-1" />';
             const weaponType = weaponTypeMap[p.pcWeaponType] || "";
-            // Concatenate RealGroupName and RealmName for Realm column (no space)
-            const realmDisplay = (p.RealGroupName || '') + (p.RealmName || '');
+            // Concatenate RealmGroupName and RealmName for Realm column (no space)
+            const realmDisplay = (p.RealmGroupName || "") + (p.RealmName || "");
             return `
           <tr>
             <td class="px-3 py-2 border">${p.rank}</td>
