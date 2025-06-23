@@ -260,6 +260,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderTop1000();
   });
 
+  // Always re-attach reset event listeners for guild and union filters
+  if (guildFilterResetBtn) {
+    guildFilterResetBtn.onclick = () => {
+      guildFilterInput.value = "";
+      setQueryParam("guild", "");
+      window.__top1000CurrentPage = 1;
+      renderTop1000();
+    };
+  }
+  if (unionFilterResetBtn) {
+    unionFilterResetBtn.onclick = () => {
+      unionFilterInput.value = "";
+      setQueryParam("union", "");
+      window.__top1000CurrentPage = 1;
+      renderTop1000();
+    };
+  }
+
   // Fetch and render top 1000 on load
   async function renderTop1000() {
     top1000TableArea.innerHTML = "";
