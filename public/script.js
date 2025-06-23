@@ -371,7 +371,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Growth Rate</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Weapon Type</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Realm</th>
-          <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Region</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Guild</th>
           <th class="px-3 py-2 border text-gray-700 dark:text-gray-100">Union</th>
         </tr>
@@ -396,6 +395,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               badge =
                 '<img src="top-5.png" alt="Top 5" title="Top 5" class="inline w-6 h-6 align-middle mr-1" />';
             const weaponType = weaponTypeMap[p.pcWeaponType] || "";
+            // Concatenate RealGroupName and RealmName for Realm column (no space)
+            const realmDisplay = (p.RealGroupName || '') + (p.RealmName || '');
             return `
           <tr>
             <td class="px-3 py-2 border">${p.rank}</td>
@@ -406,8 +407,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               p.score,
             ).toLocaleString()}</td>
             <td class="px-3 py-2 border">${weaponType}</td>
-            <td class="px-3 py-2 border">${p.RealmName}</td>
-            <td class="px-3 py-2 border">${p.RegionName}</td>
+            <td class="px-3 py-2 border">${realmDisplay}</td>
             <td class="px-3 py-2 border">${p.GuildName || ""}</td>
             <td class="px-3 py-2 border">${p.GuildUnionName || ""}</td>
           </tr>
