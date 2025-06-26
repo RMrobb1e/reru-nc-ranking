@@ -316,9 +316,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      // Pagination logic
-      const totalPages = 10; // 1000 / 100
-      if (currentPage > totalPages) currentPage = 1;
+      // Pagination logic (based on filtered results)
+      const totalFilteredPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+      if (currentPage > totalFilteredPages) currentPage = 1;
       window.__top1000CurrentPage = currentPage;
 
       function renderPagination(pages) {
@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (filteredItems.length <= pageSize) {
         pagedItems = filteredItems;
         showPagination = false;
-      } else if (window.__top1000Cache && window.__top1000Cache[regionCode]) {
+      } else {
         pagedItems = filteredItems.slice(
           (currentPage - 1) * pageSize,
           currentPage * pageSize,
@@ -387,7 +387,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       top1000TableArea.innerHTML =
         renderTop1000Table(pagedItems) +
         (showPagination
-          ? renderPagination(Math.ceil(filteredItems.length / pageSize))
+          ? renderPagination(totalFilteredPages)
           : "");
 
       // Add event listeners for pagination buttons
