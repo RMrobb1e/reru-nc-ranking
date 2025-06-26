@@ -287,9 +287,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // If not cached and first page, fetch all 1000
       if (!items && currentPage === 1) {
-        let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
+        let url = `${API_BASE}/api/growth-top-1000?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
+          url = `http://localhost:8787/api/growth-top-1000?regionCode=${regionCode}`;
         }
         const res = await fetch(url);
         const data = await res.json();
@@ -317,7 +317,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       // Pagination logic (based on filtered results)
-      const totalFilteredPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+      const totalFilteredPages = Math.max(
+        1,
+        Math.ceil(filteredItems.length / pageSize),
+      );
       if (currentPage > totalFilteredPages) currentPage = 1;
       window.__top1000CurrentPage = currentPage;
 
@@ -386,9 +389,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
         renderTop1000Table(pagedItems) +
-        (showPagination
-          ? renderPagination(totalFilteredPages)
-          : "");
+        (showPagination ? renderPagination(totalFilteredPages) : "");
 
       // Add event listeners for pagination buttons
       if (showPagination) {
