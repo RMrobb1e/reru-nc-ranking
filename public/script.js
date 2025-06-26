@@ -287,9 +287,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // If not cached and first page, fetch all 1000
       if (!items && currentPage === 1) {
-        let url = `${API_BASE}/api/growth-top-1000?regionCode=${regionCode}`;
+        let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-top-1000?regionCode=${regionCode}`;
+          url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
         }
         const res = await fetch(url);
         const data = await res.json();
