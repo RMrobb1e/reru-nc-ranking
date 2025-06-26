@@ -287,9 +287,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // If not cached and first page, fetch all 1000
       if (!items && currentPage === 1) {
-        let url = `${API_BASE}/api/growth-top-1000?regionCode=${regionCode}`;
+        let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-top-1000?regionCode=${regionCode}`;
+          url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
         }
         const res = await fetch(url);
         const data = await res.json();
@@ -314,27 +314,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         top1000TableArea.innerHTML =
           '<div class="text-gray-500 py-8 text-center">No data found.</div>';
         return;
-      }
-
-      // Pagination logic (based on filtered results)
-      const totalFilteredPages = Math.max(
-        1,
-        Math.ceil(filteredItems.length / pageSize),
-      );
-      if (currentPage > totalFilteredPages) currentPage = 1;
-      window.__top1000CurrentPage = currentPage;
-
-      function renderPagination(pages) {
-        let html = '<div class="flex justify-center my-4 gap-2">';
-        for (let i = 1; i <= pages; i++) {
-          html += `<button class="px-3 py-1 rounded ${
-            i === currentPage
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }" data-page="${i}">${i}</button>`;
-        }
-        html += "</div>";
-        return html;
       }
 
       // Filter by guild/union/realm if set
@@ -373,6 +352,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       }
 
+      // (Removed duplicate filter declarations and logic)
+
+      // Pagination logic (based on filtered results)
+      const totalFilteredPages = Math.max(
+        1,
+        Math.ceil(filteredItems.length / pageSize),
+      );
+      if (currentPage > totalFilteredPages) currentPage = 1;
+      window.__top1000CurrentPage = currentPage;
+
+      function renderPagination(pages) {
+        let html = '<div class="flex justify-center my-4 gap-2">';
+        for (let i = 1; i <= pages; i++) {
+          html += `<button class="px-3 py-1 rounded ${
+            i === currentPage
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }" data-page="${i}">${i}</button>`;
+        }
+        html += "</div>";
+        return html;
+      }
+
       // If filtered results are 100 or fewer, show all and remove pagination
       let pagedItems = filteredItems;
       let showPagination = true;
@@ -405,6 +407,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       }
     } catch (err) {
+      console.log(err);
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
         '<div class="text-red-500 py-8 text-center">Failed to load top 1000 players.</div>';
