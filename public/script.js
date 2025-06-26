@@ -150,7 +150,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     top1000Loader.style.display = "none";
     // Insert after all filter wrappers (region, guild, union, realm)
     // Find the last filter wrapper
-    const filterWrappers = top1000Section.querySelectorAll('div.inline-flex.items-center');
+    const filterWrappers = top1000Section.querySelectorAll(
+      "div.inline-flex.items-center",
+    );
     if (filterWrappers.length > 0) {
       const lastFilter = filterWrappers[filterWrappers.length - 1];
       lastFilter.after(top1000Loader);
@@ -285,9 +287,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // If not cached and first page, fetch all 1000
       if (!items && currentPage === 1) {
-        let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
+        let url = `${API_BASE}/api/growth-top-1000?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
+          url = `http://localhost:8787/api/growth-top-1000?regionCode=${regionCode}`;
         }
         const res = await fetch(url);
         const data = await res.json();
