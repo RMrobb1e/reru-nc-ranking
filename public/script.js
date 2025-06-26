@@ -262,6 +262,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
+  // Add reset event listener for realm filter
+  if (realmFilterResetBtn) {
+    realmFilterResetBtn.onclick = () => {
+      realmFilterInput.value = "";
+      setQueryParam("realm", "");
+      window.__top1000CurrentPage = 1;
+      renderTop1000();
+    };
+  }
+
   // Fetch and render top 1000 on load
   async function renderTop1000() {
     top1000TableArea.innerHTML = "";
