@@ -427,21 +427,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       </thead>
       <tbody>
         ${players
-          .map((p) => {
+          .map((p, i) => {
             let badge = "";
-            if (p.rank === 1)
+            const displayRank = i + 1;
+            if (displayRank === 1)
               badge =
                 '<img src="top-1.png" alt="Top 1" title="Top 1" class="inline w-6 h-6 align-middle mr-1" />';
-            else if (p.rank === 2)
+            else if (displayRank === 2)
               badge =
                 '<img src="top-2.png" alt="Top 2" title="Top 2" class="inline w-6 h-6 align-middle mr-1" />';
-            else if (p.rank === 3)
+            else if (displayRank === 3)
               badge =
                 '<img src="top-3.png" alt="Top 3" title="Top 3" class="inline w-6 h-6 align-middle mr-1" />';
-            else if (p.rank === 4)
+            else if (displayRank === 4)
               badge =
                 '<img src="top-4.png" alt="Top 4" title="Top 4" class="inline w-6 h-6 align-middle mr-1" />';
-            else if (p.rank === 5)
+            else if (displayRank === 5)
               badge =
                 '<img src="top-5.png" alt="Top 5" title="Top 5" class="inline w-6 h-6 align-middle mr-1" />';
             const weaponType = weaponTypeMap[p.pcWeaponType] || "";
@@ -451,7 +452,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               (p.RealmName || "");
             return `
           <tr>
-            <td class="px-3 py-2 border">${p.rank}</td>
+            <td class="px-3 py-2 border">${displayRank}</td>
             <td class="px-3 py-2 border flex items-center gap-2">${badge}${
               p.CharacterName
             }</td>
