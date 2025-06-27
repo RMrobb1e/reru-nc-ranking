@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (regionSelect) {
     const { regions } = await fetchMetadata();
     regions.forEach((region) => {
-      if (region.code === 0 || region.name.toLowerCase() === 'all') return; // Remove 'All' option
+      if (region.code === 0 || region.name.toLowerCase() === "all") return; // Remove 'All' option
       const option = document.createElement("option");
       option.value = region.code;
       option.textContent = region.name;
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { regions: allRegions } = await fetchMetadata();
   top1000RegionSelect.innerHTML = "";
   allRegions.forEach((region) => {
-    if (region.code === 0 || region.name.toLowerCase() === 'all') return; // Remove 'All' option
+    if (region.code === 0 || region.name.toLowerCase() === "all") return; // Remove 'All' option
     const option = document.createElement("option");
     option.value = region.code;
     option.textContent = region.name;
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // If not cached and first page, fetch all 1000
       if (!items && currentPage === 1) {
-        let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
+        let url = `${API_BASE}/api/growth-top-1000?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
           url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
         }
