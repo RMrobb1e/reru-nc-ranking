@@ -19,16 +19,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (regionSelect) {
     const { regions } = await fetchMetadata();
-
     regions.forEach((region) => {
+      if (region.code === 0 || region.name.toLowerCase() === 'all') return; // Remove 'All' option
       const option = document.createElement("option");
       option.value = region.code;
       option.textContent = region.name;
-
       if (region.code === 2020) {
         option.selected = true;
       }
-
       regionSelect.appendChild(option);
     });
   }
@@ -166,6 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { regions: allRegions } = await fetchMetadata();
   top1000RegionSelect.innerHTML = "";
   allRegions.forEach((region) => {
+    if (region.code === 0 || region.name.toLowerCase() === 'all') return; // Remove 'All' option
     const option = document.createElement("option");
     option.value = region.code;
     option.textContent = region.name;
@@ -362,15 +361,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (currentPage > totalFilteredPages) currentPage = 1;
       window.__top1000CurrentPage = currentPage;
 
-      function renderPagination(pages) {
-        let html = '<div class="flex justify-center my-4 gap-2">';
-        for (let i = 1; i <= pages; i++) {
-          html += `<button class="px-3 py-1 rounded ${
-            i === currentPage
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }" data-page="${i}">${i}</button>`;
-        }
+      function renderPagination(pages, totalItems) {
+        let html = '<div class="flex flex-col items-center my-4 gap-2">';
+        html += `<div class="mb-2 text-gray-600 dark:text-gray-300 text-sm">Total: <span class="font-semibold">${totalItems.toLocaleString()}</span> items</div>`;
+        html += '<div class="flex gap-2">';
+        // Prev button
+        html += `<button class="px-3 py-1 rounded ${
+          currentPage === 1
+            ? "bg-gray-300 text-gray-400 cursor-not-allowed"
+            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+        }" data-page="prev" ${
+          currentPage === 1 ? "disabled" : ""
+        }>Prev</button>`;
+
+        // Jump to page input
+        html += `<input type="number" min="1" max="${pages}" value="${currentPage}" class="w-16 px-2 py-1 border rounded text-center dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100" id="jumpToPageInput" />`;
+        html += `<span class="text-gray-500 dark:text-gray-300">/ ${pages}</span>`;
+
+        // Next button
+        html += `<button class="px-3 py-1 rounded ${
+          currentPage === pages
+            ? "bg-gray-300 text-gray-400 cursor-not-allowed"
+            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+        }" data-page="next" ${
+          currentPage === pages ? "disabled" : ""
+        }>Next</button>`;
+        html += "</div>";
         html += "</div>";
         return html;
       }
@@ -391,26 +407,52 @@ document.addEventListener("DOMContentLoaded", async () => {
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
         renderTop1000Table(pagedItems) +
-        (showPagination ? renderPagination(totalFilteredPages) : "");
+        (showPagination
+          ? renderPagination(totalFilteredPages, filteredItems.length)
+          : "");
 
-      // Add event listeners for pagination buttons
+      // Add event listeners for pagination controls
       if (showPagination) {
-        top1000TableArea
-          .querySelectorAll("button[data-page]")
-          .forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              window.__top1000CurrentPage = Number(
-                btn.getAttribute("data-page"),
-              );
+        // Prev/Next buttons
+        const prevBtn = top1000TableArea.querySelector(
+          'button[data-page="prev"]',
+        );
+        const nextBtn = top1000TableArea.querySelector(
+          'button[data-page="next"]',
+        );
+        if (prevBtn) {
+          prevBtn.addEventListener("click", () => {
+            if (window.__top1000CurrentPage > 1) {
+              window.__top1000CurrentPage--;
               renderTop1000();
-            });
+            }
           });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener("click", () => {
+            if (window.__top1000CurrentPage < totalFilteredPages) {
+              window.__top1000CurrentPage++;
+              renderTop1000();
+            }
+          });
+        }
+        // Jump to page input
+        const jumpInput = top1000TableArea.querySelector("#jumpToPageInput");
+        if (jumpInput) {
+          jumpInput.addEventListener("change", (e) => {
+            let val = parseInt(jumpInput.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > totalFilteredPages) val = totalFilteredPages;
+            window.__top1000CurrentPage = val;
+            renderTop1000();
+          });
+        }
       }
     } catch (err) {
       console.log(err);
       top1000Loader.style.display = "none";
       top1000TableArea.innerHTML =
-        '<div class="text-red-500 py-8 text-center">Failed to load top 1000 players.</div>';
+        '<div class="text-red-500 py-8 text-center">Failed to load top players.</div>';
     }
   }
 
