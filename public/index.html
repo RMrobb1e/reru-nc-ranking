@@ -1,175 +1,319 @@
 <!DOCTYPE html>
-<html lang="en" class="dark:bg-gray-900">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="description" content="Rerunen - Night Crows Growth Ranking Search" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Rerunen - Night Crows Growth Ranking Search">
   <title>Reru - Night Crows Growth Ranking</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Tailwind dark mode config
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2563eb',
+    // Configure Tailwind after it loads
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof tailwind !== 'undefined') {
+        tailwind.config = {
+          darkMode: 'class',
+          theme: {
+            extend: {
+              colors: {
+                primary: '#2563eb',
+              },
+            },
           },
-        },
-      },
-    };
+        };
+      }
+    });
   </script>
   <script src="script.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
-  <!-- Password Modal Overlay -->
-  <div id="rerunenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
-    style="backdrop-filter: blur(2px);">
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 w-full max-w-xs flex flex-col items-center">
-      <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">Enter Site Key</h2>
-      <input id="rerunenInput" type="password" placeholder="Site Key" autocomplete="current-password"
-        class="w-full mb-4 p-3 border rounded-lg text-center dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <button id="rerunenSubmit"
-        class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
-        Enter
-      </button>
-      <p id="rerunenError" class="text-red-500 dark:text-red-400 text-sm mt-3 hidden">Incorrect key. Please try again.
-      </p>
+<body class="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <!-- Password Modal -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+    style="display: none;">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-sm mx-4">
+      <h2 class="text-xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">Enter Site Key</h2>
+      <div class="space-y-4">
+        <input id="authInput" type="password" placeholder="Site Key" autocomplete="current-password"
+          class="w-full p-3 border rounded-lg text-center dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+        <button id="authSubmit"
+          class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+          Enter
+        </button>
+        <p id="authError" class="text-red-500 dark:text-red-400 text-sm text-center hidden">
+          Incorrect key. Please try again.
+        </p>
+      </div>
     </div>
   </div>
 
-  <div
-    class="max-w-5xl mx-auto p-6 mt-10 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-300">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">Night Crows Growth Ranking Search</h1>
-      <button id="darkModeToggle" aria-label="Toggle dark mode"
-        class="rounded-full p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-        <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-200"
-          fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path id="sunIcon" class="block dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.93l-.71-.71M12 5a7 7 0 100 14 7 7 0 000-14z" />
-          <path id="moonIcon" class="hidden dark:block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
-        </svg>
-      </button>
-    </div>
-    <div id="top100Section">
-      <div class="flex justify-between items-center mb-6">
-        <span class="text-lg font-semibold">Top Players</span>
-        <button id="showSearchBtn"
-          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
-          Search by IGN
-        </button>
-      </div>
-      <div id="top100TableArea" class="overflow-x-auto"></div>
-    </div>
-    <div id="searchSection" style="display:none;">
-      <div class="flex items-center gap-4 mb-6">
-        <select id="regionSelect"
-          class="p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100">
-          <!-- Will be populated via script.js -->
-        </select>
-        <div class="relative flex-1">
-          <input type="text" id="ignInput" placeholder="Enter ASIA II IGN"
-            class="w-full p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:caret-blue-400" />
-          <button id="bookmarkButton" onclick="toggleBookmark()"
-            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+  <!-- Main Content -->
+  <div class="max-w-6xl mx-auto p-6 mt-8">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl font-bold">Night Crows Growth Ranking</h1>
+          <button id="themeToggle"
+            class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+            aria-label="Toggle dark mode">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path id="sunIcon" class="dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.93l-.71-.71M12 5a7 7 0 100 14 7 7 0 000-14z" />
+              <path id="moonIcon" class="hidden dark:block" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
             </svg>
           </button>
         </div>
-        <button id="searchButton"
-          class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
-          Search
-        </button>
-        <button id="showTop100Btn"
-          class="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 transition-colors">
-          Show Top Players
-        </button>
       </div>
-      <div id="bookmarks" class="flex flex-wrap gap-2 mb-4">
-        <!-- Bookmarks will be populated here -->
+
+      <!-- Content Area -->
+      <div class="p-6">
+        <!-- Navigation -->
+        <div class="flex justify-center mb-6">
+          <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-1 flex">
+            <button id="showTop100Btn"
+              class="px-4 py-2 rounded-md font-medium transition-colors bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm">
+              Top Players
+            </button>
+            <button id="showSearchBtn"
+              class="px-4 py-2 rounded-md font-medium transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+              Search by IGN
+            </button>
+          </div>
+        </div>
+
+        <!-- Top Players Section -->
+        <div id="top100Section">
+          <div class="text-center mb-6">
+            <h2 class="text-lg font-semibold mb-2">Top Ranked Players</h2>
+            <p class="text-gray-600 dark:text-gray-400">Displaying the highest ranked players</p>
+          </div>
+          <div id="top100TableArea" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-center py-12">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span class="ml-3 text-gray-600 dark:text-gray-400">Loading rankings...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Section -->
+        <div id="searchSection" class="hidden">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4">Search Player Rankings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <select id="regionSelect"
+                class="p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <!-- Will be populated via script.js -->
+              </select>
+              <div class="relative">
+                <input type="text" id="ignInput" placeholder="Enter player IGN"
+                  class="w-full p-3 pr-12 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <button id="bookmarkButton" onclick="toggleBookmark()"
+                  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
+                  aria-label="Bookmark player">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                </button>
+              </div>
+              <button id="searchButton"
+                class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 font-medium">
+                Search
+              </button>
+            </div>
+          </div>
+
+          <!-- Bookmarks -->
+          <div id="bookmarks" class="flex flex-wrap gap-2 mb-4">
+            <!-- Bookmarks will be populated here -->
+          </div>
+
+          <!-- Search Results -->
+          <div id="resultArea" class="mt-6"></div>
+        </div>
       </div>
-      <div id="resultArea" class="mt-6"></div>
     </div>
   </div>
-  <script>
-    // Dark mode toggle logic
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const html = document.documentElement;
-    function setDarkMode(on) {
-      if (on) {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
-    }
-    // Initial mode
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-    darkModeToggle.addEventListener('click', () => {
-      setDarkMode(!html.classList.contains('dark'));
-    });
 
-    // Site key modal logic
-    const rerunenModal = document.getElementById('rerunenModal');
-    const rerunenInput = document.getElementById('rerunenInput');
-    const rerunenSubmit = document.getElementById('rerunenSubmit');
-    const rerunenError = document.getElementById('rerunenError');
-    const RERU_KEY = 'rerunc';
-    const RERU_KEY_STORAGE = 'siteKeyEntered';
-    // Focus input on load, or skip modal if already entered
-    window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem(RERU_KEY_STORAGE) === RERU_KEY) {
-        rerunenModal.style.display = 'none';
+  <script>
+    // Constants
+    const SITE_KEY = 'rerunc';
+    const STORAGE_KEY = 'siteKeyEntered';
+    const THEME_KEY = 'theme';
+    const BOOKMARKS_KEY = 'playerBookmarks';
+
+    // DOM Elements
+    const authModal = document.getElementById('authModal');
+    const authInput = document.getElementById('authInput');
+    const authSubmit = document.getElementById('authSubmit');
+    const authError = document.getElementById('authError');
+    const themeToggle = document.getElementById('themeToggle');
+    const showTop100Btn = document.getElementById('showTop100Btn');
+    const showSearchBtn = document.getElementById('showSearchBtn');
+    const top100Section = document.getElementById('top100Section');
+    const searchSection = document.getElementById('searchSection');
+    const regionSelect = document.getElementById('regionSelect');
+    const ignInput = document.getElementById('ignInput');
+    const bookmarkButton = document.getElementById('bookmarkButton');
+    const searchButton = document.getElementById('searchButton');
+    const bookmarks = document.getElementById('bookmarks');
+    const resultArea = document.getElementById('resultArea');
+
+    // Theme Management
+    class ThemeManager {
+      constructor() {
+        this.init();
+      }
+
+      init() {
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          this.setDarkMode(true);
+        }
+
+        themeToggle.addEventListener('click', () => this.toggle());
+      }
+
+      setDarkMode(enabled) {
+        document.documentElement.classList.toggle('dark', enabled);
+        localStorage.setItem(THEME_KEY, enabled ? 'dark' : 'light');
+      }
+
+      toggle() {
+        this.setDarkMode(!document.documentElement.classList.contains('dark'));
+      }
+    }
+
+    // Authentication Manager
+    class AuthManager {
+      constructor() {
+        this.init();
+      }
+
+      init() {
+        if (localStorage.getItem(STORAGE_KEY) === SITE_KEY) {
+          this.unlock();
+        } else {
+          this.showModal();
+        }
+
+        authSubmit.addEventListener('click', () => this.authenticate());
+        authInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.authenticate();
+          else this.hideError();
+        });
+      }
+
+      showModal() {
+        authModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => authInput.focus(), 100);
+      }
+
+      hideModal() {
+        authModal.style.display = 'none';
         document.body.style.overflow = '';
-      } else {
-        if (rerunenModal) rerunenInput.focus();
       }
-    });
-    function unlockSite() {
-      rerunenModal.style.display = 'none';
-      document.body.style.overflow = '';
-      localStorage.setItem(RERU_KEY_STORAGE, RERU_KEY);
-    }
-    function showError() {
-      rerunenError.classList.remove('hidden');
-      rerunenInput.classList.add('border-red-500');
-    }
-    function hideError() {
-      rerunenError.classList.add('hidden');
-      rerunenInput.classList.remove('border-red-500');
-    }
-    rerunenSubmit.addEventListener('click', () => {
-      if (rerunenInput.value === RERU_KEY) {
-        unlockSite();
-      } else {
-        showError();
-        rerunenInput.value = '';
-        rerunenInput.focus();
+
+      authenticate() {
+        if (authInput.value === SITE_KEY) {
+          localStorage.setItem(STORAGE_KEY, SITE_KEY);
+          this.unlock();
+        } else {
+          this.showError();
+        }
       }
-    });
-    rerunenInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        rerunenSubmit.click();
-      } else {
-        hideError();
+
+      unlock() {
+        this.hideModal();
+        this.hideError();
       }
+
+      showError() {
+        authError.classList.remove('hidden');
+        authInput.classList.add('border-red-500');
+        authInput.value = '';
+        authInput.focus();
+      }
+
+      hideError() {
+        authError.classList.add('hidden');
+        authInput.classList.remove('border-red-500');
+      }
+    }
+
+    // Tab Manager
+    class TabManager {
+      constructor() {
+        this.activeTab = 'top100';
+        this.init();
+      }
+
+      init() {
+        showTop100Btn.addEventListener('click', () => this.switchTab('top100'));
+        showSearchBtn.addEventListener('click', () => this.switchTab('search'));
+      }
+
+      switchTab(tab) {
+        this.activeTab = tab;
+
+        // Update tab buttons
+        const tabs = [showTop100Btn, showSearchBtn];
+        tabs.forEach(btn => {
+          btn.classList.remove('bg-white', 'dark:bg-gray-600', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+          btn.classList.add('text-gray-600', 'dark:text-gray-400');
+        });
+
+        // Update sections
+        if (tab === 'top100') {
+          showTop100Btn.classList.add('bg-white', 'dark:bg-gray-600', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+          showTop100Btn.classList.remove('text-gray-600', 'dark:text-gray-400');
+          top100Section.classList.remove('hidden');
+          searchSection.classList.add('hidden');
+        } else {
+          showSearchBtn.classList.add('bg-white', 'dark:bg-gray-600', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+          showSearchBtn.classList.remove('text-gray-600', 'dark:text-gray-400');
+          searchSection.classList.remove('hidden');
+          top100Section.classList.add('hidden');
+        }
+      }
+    }
+
+    // Search Manager
+    class SearchManager {
+      constructor() {
+        this.init();
+      }
+
+      init() {
+        searchButton.addEventListener('click', () => this.search());
+        ignInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.search();
+        });
+      }
+
+      search() {
+        // This will be handled by the original script.js
+        // Placeholder for original search functionality
+      }
+    }
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', () => {
+      new ThemeManager();
+      new AuthManager();
+      new TabManager();
+      new SearchManager();
+
+      // Make toggleBookmark globally available for the original script
+      // window.toggleBookmark = toggleBookmark;
     });
-    // Prevent scrolling when modal is open
-    if (rerunenModal && localStorage.getItem(RERU_KEY_STORAGE) !== RERU_KEY) document.body.style.overflow = 'hidden';
   </script>
 </body>
 
