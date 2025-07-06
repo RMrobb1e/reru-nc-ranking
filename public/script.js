@@ -6,7 +6,7 @@ const API_BASE = (() => {
     case "reru-nc-ranking.onrender.com":
       return "https://reru-nc-ranking.onrender.com";
     default:
-      return "https://nc-ranking-backend.robbie-ad5.workers.dev";
+      return "https://reru.alwaysdata.net";
   }
 })(); // <- replace with your Cloudflare Worker URL
 
