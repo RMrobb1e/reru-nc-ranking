@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!items && currentPage === 1) {
         let url = `${API_BASE}/api/growth-top-players?regionCode=${regionCode}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-top-players?regionCode=${regionCode}`;
+          url = `http://localhost:3000/api/growth-top-players?regionCode=${regionCode}`;
         }
         const res = await fetch(url);
         const data = await res.json();
@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!items) {
         let url = `${API_BASE}/api/growth-page?regionCode=${regionCode}&page=${currentPage}`;
         if (window.location.hostname === "localhost") {
-          url = `http://localhost:8787/api/growth-page?regionCode=${regionCode}&page=${currentPage}`;
+          url = `http://localhost:3000/api/growth-page?regionCode=${regionCode}&page=${currentPage}`;
         }
         const res = await fetch(url);
         const data = await res.json();
